@@ -4,6 +4,7 @@ import serial
 from ui.commander_ui import Ui_MainWindow
 from serial import Serial
 import traceback
+from time import sleep
 
 TAKEOFF_COMMAND = ":TAKEOFF\n"
 IDLE_COMMAND = ":IDLE\n"
@@ -22,8 +23,10 @@ class CX10RemoteCommander(Ui_MainWindow):
     self.idle_button.clicked.connect(lambda : self.send_command(IDLE_COMMAND))
     self.land_button.clicked.connect(lambda : self.send_command(LAND_COMMAND))
     self.start_button.clicked.connect(lambda : self.send_command(START_COMMAND))
-    self.distance_slider.valueChanged.connect(lambda x: self.send_command(DISTANCE_THRESHOLD.format(x)))
-    self.limit_slider.valueChanged.connect(lambda x: self.send_command(LIMIT.format(x)))
+    self.distance_slider.valueChanged.connect(lambda x: self.distance_label.setText(str(float(x)/10.)))
+    self.distance_slider.valueChanged.connect(lambda x: self.send_command(DISTANCE_THRESHOLD.format(float(x)/10.)))
+    self.limit_slider.valueChanged.connect(lambda x: self.limit_label.setText(str(float(x)/10.)))
+    self.limit_slider.valueChanged.connect(lambda x: self.send_command(LIMIT.format(float(x)/10.)))
     self.mire_display.mode_label = self.mode_label
     self.serial_monitor = SerialMonitor(port, baudrate, self.mire_display)
     self.serial_monitor.start()
@@ -42,7 +45,11 @@ class CX10RemoteCommander(Ui_MainWindow):
 class SerialMonitor(QtCore.QThread):
   def __init__(self, port, baudrate, mire_display):
     QtCore.QThread.__init__(self)
-    self.ser = Serial(port, baudrate, timeout=1)
+    try:
+        self.ser = Serial(port, baudrate, timeout=0.1)
+    except:
+        print("serial port not openned")
+        self.ser = None
     self.running = False
     self.mire_display = mire_display
     self.command = ""
@@ -51,6 +58,9 @@ class SerialMonitor(QtCore.QThread):
     self.running = True
     print("thread started")
     while self.running:
+      if self.ser is None:
+        sleep(1)
+        continue
       if self.command != "":
         self.ser.write(self.command.encode())
         self.command = ""
