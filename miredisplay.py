@@ -11,7 +11,7 @@ class MireDisplay(QtWidgets.QWidget):
   def __init__(self, parent=None):
     QtWidgets.QWidget.__init__(self)
     #self.drone_info = (50,70,20, 0)
-    self.drone_info = (0,0,20, 0)
+    self.drone_info = (0,0,42, 0)
     self.mode_label = None
     
   
@@ -37,12 +37,12 @@ class MireDisplay(QtWidgets.QWidget):
     x, y, d, status = self.drone_info
     xd = (x + W - DRONE_SIZE)/2.
     yd = (-y + H - DRONE_SIZE)/2.
-    print("pos",xd,yd)
+    #print("pos",xd,yd)
     qp.drawRect(int(xd), int(yd), DRONE_SIZE, DRONE_SIZE)
     
   def draw_distance(self, qp, event):
     qp.setPen(Qt.black)
-    qp.drawText(900, 40, "{:.2f}".format(self.drone_info[2]))
+    qp.drawText(850, 40, "Dist: {:.2f}".format(self.drone_info[2]))
   
   def set_drone_info(self, info :Tuple):
     self.drone_info = info
