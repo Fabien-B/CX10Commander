@@ -42,7 +42,7 @@ class CX10RemoteCommander(Ui_MainWindow):
 class SerialMonitor(QtCore.QThread):
   def __init__(self, port, baudrate, mire_display):
     QtCore.QThread.__init__(self)
-    self.ser = Serial(port, baudrate, timeout=0.1)
+    self.ser = Serial(port, baudrate, timeout=1)
     self.running = False
     self.mire_display = mire_display
     self.command = ""
@@ -54,12 +54,23 @@ class SerialMonitor(QtCore.QThread):
       if self.command != "":
         self.ser.write(self.command.encode())
         self.command = ""
-      line = self.ser.readline().strip().decode()
-      if line == '' or line[0] != ':':
-        continue
-      data = line[1:].split(',')
+      line = self.ser.readline().strip()
+      #line = self.ser.readline().strip().decode()
+      #print('line',line)
       try:
-        drone_info = (int(data[0]), int(data[1]), int(data[2]), int(data[3]))
+          dec = line.decode()
+      except Exception as e:
+          print("decode error '{}'".format(str(e)))
+          dec = ''
+      #print('dec',dec)
+      if dec == '' or dec[0] != ':':
+        continue
+      data = dec[1:].split(',')
+      #if line == '' or line[0] != ':':
+      #  continue
+      #data = line[1:].split(',')
+      try:
+        drone_info = (float(data[0]), float(data[1]), float(data[2]), int(data[3]))
         self.mire_display.set_drone_info(drone_info)
       except IndexError:
         pass

@@ -5,11 +5,13 @@ from PyQt5.QtCore import Qt
 
 W = 968
 H = 608
+DRONE_SIZE = 10
 
 class MireDisplay(QtWidgets.QWidget):
   def __init__(self, parent=None):
     QtWidgets.QWidget.__init__(self)
-    self.drone_info = (50,70,20, 0)
+    #self.drone_info = (50,70,20, 0)
+    self.drone_info = (0,0,20, 0)
     self.mode_label = None
     
   
@@ -33,7 +35,10 @@ class MireDisplay(QtWidgets.QWidget):
     qp.setPen(QColor(168, 34, 3))
     qp.setBrush(QColor(168, 34, 3))
     x, y, d, status = self.drone_info
-    qp.drawRect(x, y, 10, 10)
+    xd = (x + W - DRONE_SIZE)/2.
+    yd = (-y + H - DRONE_SIZE)/2.
+    print("pos",xd,yd)
+    qp.drawRect(int(xd), int(yd), DRONE_SIZE, DRONE_SIZE)
     
   def draw_distance(self, qp, event):
     qp.setPen(Qt.black)
