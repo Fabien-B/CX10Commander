@@ -9,9 +9,13 @@ from time import sleep
 TAKEOFF_COMMAND = ":TAKEOFF\n"
 IDLE_COMMAND = ":IDLE\n"
 LAND_COMMAND = ":LAND\n"
-START_COMMAND = ":START\n"
 DISTANCE_THRESHOLD = ":DIST {}\n"
-LIMIT = ":LIMIT {}\n"
+START_COMMAND = ":START\n"
+START_LAND_COMMAND = ":START_LAND\n"
+LIMIT_COMMAND = ":LIMIT {}\n"
+START2_COMMAND = ":START2\n"
+START_LAND2_COMMAND = ":START_LAND2\n"
+LIMIT2_COMMAND = ":LIMIT2 {}\n"
 
 class CX10RemoteCommander(Ui_MainWindow):
   
@@ -19,15 +23,25 @@ class CX10RemoteCommander(Ui_MainWindow):
     Ui_MainWindow.__init__(self)
 
   def built(self, port, baudrate=115200):
+    # mode
+    self.mire_display.mode_label = self.mode_label
+    # top part
     self.takeoff_button.clicked.connect(lambda : self.send_command(TAKEOFF_COMMAND))
     self.idle_button.clicked.connect(lambda : self.send_command(IDLE_COMMAND))
     self.land_button.clicked.connect(lambda : self.send_command(LAND_COMMAND))
-    self.start_button.clicked.connect(lambda : self.send_command(START_COMMAND))
     self.distance_slider.valueChanged.connect(lambda x: self.distance_label.setText(str(float(x)/10.)))
     self.distance_slider.valueChanged.connect(lambda x: self.send_command(DISTANCE_THRESHOLD.format(float(x)/10.)))
+    # mission 1
+    self.start_button.clicked.connect(lambda : self.send_command(START_COMMAND))
+    self.start_land_button.clicked.connect(lambda : self.send_command(START_LAND_COMMAND))
     self.limit_slider.valueChanged.connect(lambda x: self.limit_label.setText(str(float(x)/10.)))
-    self.limit_slider.valueChanged.connect(lambda x: self.send_command(LIMIT.format(float(x)/10.)))
-    self.mire_display.mode_label = self.mode_label
+    self.limit_slider.valueChanged.connect(lambda x: self.send_command(LIMIT_COMMAND.format(float(x)/10.)))
+    # mission 2
+    self.start2_button.clicked.connect(lambda : self.send_command(START2_COMMAND))
+    self.start_land2_button.clicked.connect(lambda : self.send_command(START_LAND2_COMMAND))
+    self.limit2_slider.valueChanged.connect(lambda x: self.limit2_label.setText(str(float(x)/10.)))
+    self.limit2_slider.valueChanged.connect(lambda x: self.send_command(LIMIT2_COMMAND.format(float(x)/10.)))
+    # serial
     self.serial_monitor = SerialMonitor(port, baudrate, self.mire_display)
     self.serial_monitor.start()
 

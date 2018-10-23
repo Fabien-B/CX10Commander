@@ -122,14 +122,17 @@
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="start_button">
-        <property name="text">
-         <string>start mission</string>
+       <widget class="Line" name="line_2">
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -137,14 +140,120 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Limit</string>
+         <string>Mission 1</string>
         </property>
        </widget>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QPushButton" name="start_button">
+          <property name="text">
+           <string>start mission 1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="start_land_button">
+          <property name="text">
+           <string>mission 1 + land</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
+         <widget class="QLabel" name="label_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Limit 1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QSlider" name="limit_slider">
+          <property name="minimum">
+           <number>10</number>
+          </property>
+          <property name="maximum">
+           <number>300</number>
+          </property>
+          <property name="value">
+           <number>100</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="limit_label">
+          <property name="text">
+           <string>10.0</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Mission 2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QPushButton" name="start2_button">
+          <property name="text">
+           <string>start mission 2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="start_land2_button">
+          <property name="text">
+           <string>mission 2 + land</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Limit2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="limit2_slider">
           <property name="minimum">
            <number>10</number>
           </property>
@@ -160,7 +269,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="limit_label">
+         <widget class="QLabel" name="limit2_label">
           <property name="text">
            <string>16.0</string>
           </property>
@@ -197,7 +306,6 @@
         <height>608</height>
        </size>
       </property>
-      <zorder></zorder>
      </widget>
     </item>
    </layout>
