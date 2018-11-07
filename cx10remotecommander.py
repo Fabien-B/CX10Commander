@@ -16,6 +16,7 @@ LIMIT_COMMAND = ":LIMIT {}\n"
 START2_COMMAND = ":START2\n"
 START_LAND2_COMMAND = ":START_LAND2\n"
 LIMIT2_COMMAND = ":LIMIT2 {}\n"
+RESET_COMMAND = ":RESET\n"
 
 class CX10RemoteCommander(Ui_MainWindow):
   
@@ -41,9 +42,15 @@ class CX10RemoteCommander(Ui_MainWindow):
     self.start_land2_button.clicked.connect(lambda : self.send_command(START_LAND2_COMMAND))
     self.limit2_slider.valueChanged.connect(lambda x: self.limit2_label.setText(str(float(x)/10.)))
     self.limit2_slider.valueChanged.connect(lambda x: self.send_command(LIMIT2_COMMAND.format(float(x)/10.)))
+    # reset
+    self.reset_mission.clicked.connect(lambda : self.send_command(RESET_COMMAND))
     # serial
-    self.serial_monitor = SerialMonitor(port, baudrate, self.mire_display)
-    self.serial_monitor.start()
+    self.serial_monitor = SerialMonitor(port, baudrate, self)
+    if self.serial_monitor.ser is None:
+        self.link_status.setText('Failed to open serial')
+    else:
+        self.link_status.setText('Serial opened')
+        self.serial_monitor.start()
 
   def closing(self):
     self.serial_monitor.running = False
@@ -57,7 +64,7 @@ class CX10RemoteCommander(Ui_MainWindow):
  
 
 class SerialMonitor(QtCore.QThread):
-  def __init__(self, port, baudrate, mire_display):
+  def __init__(self, port, baudrate, window):
     QtCore.QThread.__init__(self)
     try:
         self.ser = Serial(port, baudrate, timeout=0.1)
@@ -65,7 +72,7 @@ class SerialMonitor(QtCore.QThread):
         print("serial port not openned")
         self.ser = None
     self.running = False
-    self.mire_display = mire_display
+    self.window = window
     self.command = ""
   
   def run(self):
@@ -79,23 +86,26 @@ class SerialMonitor(QtCore.QThread):
         self.ser.write(self.command.encode())
         self.command = ""
       line = self.ser.readline().strip()
-      #line = self.ser.readline().strip().decode()
-      #print('line',line)
       try:
           dec = line.decode()
       except Exception as e:
           print("decode error '{}'".format(str(e)))
           dec = ''
-      #print('dec',dec)
-      if dec == '' or dec[0] != ':':
-        continue
+      if dec == '':
+          self.window.link_status.setText('Serial opened: not receiving data')
+          continue
+      if dec[0] != ':':
+          self.window.link_status.setText('Serial opened: receiving wrong data')
+          continue
+      self.window.link_status.setText('Serial opened: receiving new data')
       data = dec[1:].split(',')
-      #if line == '' or line[0] != ':':
-      #  continue
-      #data = line[1:].split(',')
       try:
-        drone_info = (float(data[0]), float(data[1]), float(data[2]), int(data[3]))
-        self.mire_display.set_drone_info(drone_info)
+          drone_info = (float(data[0]), float(data[1]), float(data[2]), int(data[3]))
+          self.window.mire_display.set_drone_info(drone_info)
+          if len(drone_info) == 7:
+              self.distance_slider.setValue(int(data[4]*10.))
+              self.limit_slider.setValue(int(data[5]*10.))
+              self.limit2_slider.setValue(int(data[6]*10.))
       except IndexError:
-        pass
-    
+          pass
+

@@ -105,7 +105,7 @@
            <number>300</number>
           </property>
           <property name="value">
-           <number>30</number>
+           <number>25</number>
           </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -115,7 +115,7 @@
         <item>
          <widget class="QLabel" name="distance_label">
           <property name="text">
-           <string>3.0</string>
+           <string>2.5</string>
           </property>
          </widget>
         </item>
@@ -148,13 +148,25 @@
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
          <widget class="QPushButton" name="start_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
-           <string>start mission 1</string>
+           <string>test 1</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="start_land_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>mission 1 + land</string>
           </property>
@@ -230,12 +242,18 @@
         <item>
          <widget class="QPushButton" name="start2_button">
           <property name="text">
-           <string>start mission 2</string>
+           <string>test 2</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="start_land2_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>mission 2 + land</string>
           </property>
@@ -278,6 +296,23 @@
        </layout>
       </item>
       <item>
+       <widget class="Line" name="line_3">
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="reset_mission">
+        <property name="text">
+         <string>Reset Mission</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -289,6 +324,16 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="link_status">
+        <property name="text">
+         <string>No serial link</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
