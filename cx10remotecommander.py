@@ -100,9 +100,10 @@ class SerialMonitor(QtCore.QThread):
       self.window.link_status.setText('Serial opened: receiving new data')
       data = dec[1:].split(',')
       try:
-          drone_info = (float(data[0]), float(data[1]), float(data[2]), int(data[3]))
-          self.window.mire_display.set_drone_info(drone_info)
-          if len(drone_info) == 7:
+          if len(drone_info) == 4:
+              drone_info = (float(data[0]), float(data[1]), float(data[2]), int(data[3]))
+              self.window.mire_display.set_drone_info(drone_info)
+          elif len(drone_info) == 3:
               self.distance_slider.setValue(int(data[4]*10.))
               self.limit_slider.setValue(int(data[5]*10.))
               self.limit2_slider.setValue(int(data[6]*10.))
