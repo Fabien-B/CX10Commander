@@ -9,7 +9,7 @@ from time import sleep
 TAKEOFF_COMMAND = ":TAKEOFF\n"
 IDLE_COMMAND = ":IDLE\n"
 LAND_COMMAND = ":LAND\n"
-DISTANCE_THRESHOLD = ":DIST {}\n"
+DISTANCE_COMMAND = ":DIST {}\n"
 START_COMMAND = ":START\n"
 START_LAND_COMMAND = ":START_LAND\n"
 LIMIT_COMMAND = ":LIMIT {}\n"
@@ -31,7 +31,7 @@ class CX10RemoteCommander(Ui_MainWindow):
     self.idle_button.clicked.connect(lambda : self.send_command(IDLE_COMMAND))
     self.land_button.clicked.connect(lambda : self.send_command(LAND_COMMAND))
     self.distance_slider.valueChanged.connect(lambda x: self.distance_label.setText(str(float(x)/10.)))
-    self.distance_slider.valueChanged.connect(lambda x: self.send_command(DISTANCE_THRESHOLD.format(float(x)/10.)))
+    self.distance_slider.valueChanged.connect(lambda x: self.send_command(DISTANCE_COMMAND.format(float(x)/10.)))
     # mission 1
     self.start_button.clicked.connect(lambda : self.send_command(START_COMMAND))
     self.start_land_button.clicked.connect(lambda : self.send_command(START_LAND_COMMAND))
@@ -100,13 +100,14 @@ class SerialMonitor(QtCore.QThread):
       self.window.link_status.setText('Serial opened: receiving new data')
       data = dec[1:].split(',')
       try:
-          if len(drone_info) == 4:
+          if len(data) == 4:
               drone_info = (float(data[0]), float(data[1]), float(data[2]), int(data[3]))
               self.window.mire_display.set_drone_info(drone_info)
-          elif len(drone_info) == 3:
-              self.distance_slider.setValue(int(data[4]*10.))
-              self.limit_slider.setValue(int(data[5]*10.))
-              self.limit2_slider.setValue(int(data[6]*10.))
+          elif len(data) == 3:
+              self.window.distance_slider.setValue(int(float(data[0])*10.))
+              self.window.limit_slider.setValue(int(float(data[1])*10.))
+              self.window.limit2_slider.setValue(int(float(data[2])*10.))
       except IndexError:
+          print("index error")
           pass
 
